@@ -1,0 +1,16 @@
+[
+  {
+    "node_id": 0,
+    "node_name": "all_reduce_8npus_1MB",
+    "node_type": "COMM_COLL_NODE",
+    "comm_size": 1048576,
+    "events": 448,
+    "quantized_events": 448,
+    "quantized_event_ratio": 1.0,
+    "original_bytes": 14680064,
+    "effective_bytes": 7340032,
+    "byte_reduction_ratio": 0.5,
+    "comm_src_count": 8,
+    "comm_dst_count": 8
+  }
+]

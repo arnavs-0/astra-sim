@@ -1,0 +1,2 @@
+node_id,node_name,node_type,comm_size,tensor_len,quantized_event_ratio,byte_reduction_ratio,keep_ratio,approx_bits,quantized_trials,trials,mse_mean,mse_std,cosine_mean,cosine_std
+0,all_reduce_8npus_1MB,COMM_COLL_NODE,1048576,65536,1.0,0.5,0.5,16,200,200,1.5527229502154682e-09,0.0,0.9999826521019771,1.6653345369377348e-15

@@ -4,6 +4,7 @@ LICENSE file in the root directory of this source tree.
 *******************************************************************************/
 
 #include "congestion_aware/CongestionAwareNetworkApi.hh"
+#include "astra-sim/system/SendPacketEventHandlerData.hh"
 #include <astra-network-analytical/congestion_aware/Chunk.h>
 #include <cassert>
 
@@ -67,9 +68,18 @@ int CongestionAwareNetworkApi::sim_send(void* const buffer,
     auto arg = std::make_unique<decltype(chunk_arrival_arg)>(chunk_arrival_arg);
     const auto arg_ptr = static_cast<void*>(arg.release());
     const auto route = topology->route(src, dst);
+
+    uint64_t node_id = 0;
+    if (fun_arg != nullptr) {
+        auto* const sehd = static_cast<SendPacketEventHandlerData*>(fun_arg);
+        if (sehd != nullptr && sehd->wlhd != nullptr) {
+            node_id = sehd->wlhd->node_id;
+        }
+    }
+
     auto chunk = std::make_unique<Chunk>(
         count, route, CongestionAwareNetworkApi::process_chunk_arrival,
-        arg_ptr);
+        arg_ptr, node_id, tag, src, dst);
 
     // initiate transmission from src -> dst.
     topology->send(std::move(chunk));

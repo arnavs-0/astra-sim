@@ -9,6 +9,7 @@ LICENSE file in the root directory of this source tree.
 #include <astra-network-analytical/common/EventQueue.h>
 #include <astra-network-analytical/common/NetworkParser.h>
 #include <astra-network-analytical/congestion_aware/Helper.h>
+#include <astra-network-analytical/congestion_aware/Link.h>
 #include <remote_memory_backend/analytical/AnalyticalRemoteMemory.hh>
 
 using namespace AstraSim;
@@ -53,6 +54,9 @@ int main(int argc, char* argv[]) {
 
     // Generate topology
     const auto network_parser = NetworkParser(network_configuration);
+    Link::configure_quantization(network_parser.get_quantization_enabled(),
+                                 network_parser.get_quantization_ratio(),
+                                 network_parser.get_quantization_queue_threshold());
     const auto topology = construct_topology(network_parser);
 
     // Get topology information
@@ -99,6 +103,8 @@ int main(int argc, char* argv[]) {
     while (!event_queue->finished()) {
         event_queue->proceed();
     }
+
+    Link::report_quantization_stats();
 
     for (auto it : systems) {
         delete it;

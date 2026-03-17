@@ -9,6 +9,7 @@ LICENSE file in the root directory of this source tree.
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "astra-sim/system/Callable.hh"
 #include "astra-sim/system/CommunicatorGroup.hh"
@@ -65,6 +66,19 @@ class Workload : public Callable {
     bool is_finished;
 
   private:
+    struct CommNodeMetadata {
+        uint64_t node_id;
+        std::string node_name;
+        std::string node_type;
+        uint64_t comm_size;
+    };
+
+    /// observed communication nodes keyed by node id
+    std::unordered_map<uint64_t, CommNodeMetadata> comm_node_metadata_map;
+
+    /// export communication node metadata for layer mapping
+    void dump_comm_node_metadata() const;
+
     // From the ET node, find out the corresponding communicator group, and
     // return the pointer. If no communicator group is specified for this ET
     // node, return nullptr.

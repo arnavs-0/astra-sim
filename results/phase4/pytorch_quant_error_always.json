@@ -1,0 +1,19 @@
+[
+  {
+    "node_id": 0,
+    "node_name": "all_reduce_8npus_1MB",
+    "node_type": "COMM_COLL_NODE",
+    "comm_size": 1048576,
+    "tensor_len": 65536,
+    "quantized_event_ratio": 1.0,
+    "byte_reduction_ratio": 0.75,
+    "keep_ratio": 0.25,
+    "approx_bits": 8,
+    "quantized_trials": 200,
+    "trials": 200,
+    "mse_mean": 0.00010339007712900639,
+    "mse_std": 0.0,
+    "cosine_mean": 0.9999193388167881,
+    "cosine_std": 2.220446049250313e-15
+  }
+]

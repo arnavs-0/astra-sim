@@ -1,0 +1,6 @@
+bandwidth_gbps,avg_wall_baseline_cycles,avg_wall_quantized_cycles,speedup_vs_baseline,throughput_gain_vs_baseline,byte_reduction_ratio,quantized_chunk_ratio,queue_above_threshold_ratio
+10,201136.00,72952.00,2.757101,1.757101,0.75,1,1
+20,115680.00,51616.00,2.241166,1.241166,0.75,1,1
+30,87232.00,44504.00,1.960093,0.960093,0.75,1,1
+40,72952.00,40920.00,1.782796,0.782796,0.75,1,1
+50,64440.00,38792.00,1.661167,0.661167,0.75,1,1

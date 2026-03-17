@@ -1,0 +1,9 @@
+node_id,node_name,node_type,comm_size,events,quantized_events,quantized_event_ratio,original_bytes,effective_bytes,byte_reduction_ratio,comm_src_count,comm_dst_count
+0,embedding_ar,COMM_COLL_NODE,262144,448,448,1.0,3670016,1835008,0.5,8,8
+1,attn_q_proj_ar,COMM_COLL_NODE,1048576,448,448,1.0,14680064,7340032,0.5,8,8
+2,attn_k_proj_ar,COMM_COLL_NODE,1048576,448,448,1.0,14680064,7340032,0.5,8,8
+3,attn_v_proj_ar,COMM_COLL_NODE,1048576,448,448,1.0,14680064,7340032,0.5,8,8
+4,attn_out_proj_ar,COMM_COLL_NODE,2097152,448,448,1.0,29360128,14680064,0.5,8,8
+5,ffn_fc1_ar,COMM_COLL_NODE,4194304,448,448,1.0,58720256,29360128,0.5,8,8
+6,ffn_fc2_ar,COMM_COLL_NODE,4194304,448,448,1.0,58720256,29360128,0.5,8,8
+7,layernorm_ar,COMM_COLL_NODE,262144,448,448,1.0,3670016,1835008,0.5,8,8

@@ -1,0 +1,2 @@
+node_id,node_name,node_type,comm_size,events,quantized_events,quantized_event_ratio,original_bytes,effective_bytes,byte_reduction_ratio,comm_src_count,comm_dst_count
+0,all_reduce_8npus_1MB,COMM_COLL_NODE,1048576,448,448,1.0,14680064,3670016,0.75,8,8

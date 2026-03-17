@@ -14,6 +14,8 @@ LICENSE file in the root directory of this source tree.
 #include <json/json.hpp>
 
 #include <iostream>
+#include <filesystem>
+#include <fstream>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -286,6 +288,17 @@ void Workload::issue_comp(shared_ptr<Chakra::FeederV3::ETFeederNode> node) {
 }
 
 void Workload::issue_comm(shared_ptr<Chakra::FeederV3::ETFeederNode> node) {
+    std::string node_type_name = "UNKNOWN";
+    if (node->type() == ChakraNodeType::COMM_COLL_NODE) {
+        node_type_name = "COMM_COLL_NODE";
+    } else if (node->type() == ChakraNodeType::COMM_SEND_NODE) {
+        node_type_name = "COMM_SEND_NODE";
+    } else if (node->type() == ChakraNodeType::COMM_RECV_NODE) {
+        node_type_name = "COMM_RECV_NODE";
+    }
+    comm_node_metadata_map[node->id()] = CommNodeMetadata{
+        node->id(), node->name(), node_type_name, node->comm_size<uint64_t>()};
+
     if (node->is_cpu_op<bool>(false)) {
         throw std::runtime_error("Comm node should not be on CPU");
     }
@@ -583,6 +596,33 @@ void Workload::report() {
         logger->info("sys[{}] peak memory usage: {:.2f} {}", sys->id,
                      peak_mem_usage, unit);
         this->local_mem_usage_tracker.reset();
+    }
+
+    dump_comm_node_metadata();
+}
+
+void Workload::dump_comm_node_metadata() const {
+    const char* dir_env = std::getenv("ASTRA_SIM_PHASE3_OUTPUT_DIR");
+    const std::string output_dir =
+        (dir_env == nullptr || std::string(dir_env).empty())
+            ? "results/phase3"
+            : std::string(dir_env);
+
+    std::error_code ec;
+    std::filesystem::create_directories(output_dir, ec);
+
+    const auto path = output_dir + "/comm_node_metadata_rank" +
+                      std::to_string(sys->id) + ".csv";
+    std::ofstream out(path, std::ios::out | std::ios::trunc);
+    if (!out.is_open()) {
+        return;
+    }
+
+    out << "node_id,node_name,node_type,comm_size\n";
+    for (const auto& kv : comm_node_metadata_map) {
+        const auto& item = kv.second;
+        out << item.node_id << ',' << item.node_name << ',' << item.node_type
+            << ',' << item.comm_size << '\n';
     }
 }
 

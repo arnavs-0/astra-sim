@@ -1,0 +1,3 @@
+run,avg_wall_cycles,avg_comm_cycles,speedup_vs_baseline,throughput_gain_vs_baseline,quantized_chunk_ratio,byte_reduction_ratio,queue_above_threshold_ratio,time_above_threshold_ns
+baseline,391240.00,391240.00,1.000000,0.000000,0,0,0,0
+candidate,281320.00,281320.00,1.390729,0.390729,1,0.75,1,9002240

@@ -1,0 +1,8 @@
+topology: [ Ring ]
+npus_count: [ 8 ]
+bandwidth: [ 30 ]  # GB/s
+latency: [ 500 ]  # ns
+quantization:
+  enabled: true
+  ratio: 0.25
+  queue_threshold: 0

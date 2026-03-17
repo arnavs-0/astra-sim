@@ -1,0 +1,9 @@
+node_id,node_name,node_type,comm_size
+7,layernorm_ar,COMM_COLL_NODE,262144
+6,ffn_fc2_ar,COMM_COLL_NODE,4194304
+5,ffn_fc1_ar,COMM_COLL_NODE,4194304
+4,attn_out_proj_ar,COMM_COLL_NODE,2097152
+3,attn_v_proj_ar,COMM_COLL_NODE,1048576
+2,attn_k_proj_ar,COMM_COLL_NODE,1048576
+1,attn_q_proj_ar,COMM_COLL_NODE,1048576
+0,embedding_ar,COMM_COLL_NODE,262144
