@@ -1,2 +1,2 @@
 node_id,node_name,node_type,comm_size
-2,all_reduce_8npus_1MB,COMM_COLL_NODE,1048576
+2,reduce_scatter_4npus_1MB,COMM_COLL_NODE,1048576
