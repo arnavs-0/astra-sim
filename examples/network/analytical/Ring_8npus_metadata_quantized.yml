@@ -1,0 +1,16 @@
+topology: [ Ring ]
+npus_count: [ 8 ]
+bandwidth: [ 50.0 ]  # GB/s
+latency: [ 500.0 ]  # ns
+quantization:
+  enabled: true
+  ratio: 0.25
+  policy: threshold
+  congestion_metric: queue_bytes
+  threshold: 16384
+  queue_threshold: 1
+  metadata:
+    mode: per_group
+    bytes_per_chunk: 8
+    bytes_per_group: 8
+    group_size_bytes: 4096

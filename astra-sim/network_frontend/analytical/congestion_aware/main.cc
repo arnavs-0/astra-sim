@@ -1,4 +1,4 @@
-/******************************************************************************
+/****************************************************************************
 This source code is licensed under the MIT license found in the
 LICENSE file in the root directory of this source tree.
 *******************************************************************************/
@@ -20,11 +20,9 @@ using namespace NetworkAnalytical;
 using namespace NetworkAnalyticalCongestionAware;
 
 int main(int argc, char* argv[]) {
-    // Parse command line arguments
     auto cmd_line_parser = CmdLineParser(argv[0]);
     cmd_line_parser.parse(argc, argv);
 
-    // Get command line arguments
     const auto workload_configuration =
         cmd_line_parser.get<std::string>("workload-configuration");
     const auto comm_group_configuration =
@@ -48,29 +46,30 @@ int main(int argc, char* argv[]) {
 
     AstraSim::LoggerFactory::init(logging_configuration, logging_folder);
 
-    // Instantiate event queue
     const auto event_queue = std::make_shared<EventQueue>();
     Topology::set_event_queue(event_queue);
 
-    // Generate topology
     const auto network_parser = NetworkParser(network_configuration);
     Link::configure_quantization(network_parser.get_quantization_enabled(),
                                  network_parser.get_quantization_ratio(),
-                                 network_parser.get_quantization_queue_threshold());
+                                 network_parser.get_quantization_queue_threshold(),
+                                 network_parser.get_quantization_policy(),
+                                 network_parser.get_quantization_metric(),
+                                 network_parser.get_quantization_threshold(),
+                                 network_parser.get_quantization_metadata_mode(),
+                                 network_parser.get_quantization_metadata_bytes_per_chunk(),
+                                 network_parser.get_quantization_metadata_bytes_per_group(),
+                                 network_parser.get_quantization_metadata_group_size_bytes());
     const auto topology = construct_topology(network_parser);
 
-    // Get topology information
     const auto npus_count = topology->get_npus_count();
     const auto npus_count_per_dim = topology->get_npus_count_per_dim();
     const auto dims_count = topology->get_dims_count();
 
-    // Set up Network API
     CongestionAwareNetworkApi::set_event_queue(event_queue);
     CongestionAwareNetworkApi::set_topology(topology);
 
-    // Create ASTRA-sim related resources
-    auto network_apis =
-        std::vector<std::unique_ptr<CongestionAwareNetworkApi>>();
+    auto network_apis = std::vector<std::unique_ptr<CongestionAwareNetworkApi>>();
     const auto memory_api =
         std::make_unique<AnalyticalRemoteMemory>(remote_memory_configuration);
     auto systems = std::vector<Sys*>();
@@ -81,7 +80,6 @@ int main(int argc, char* argv[]) {
     }
 
     for (int i = 0; i < npus_count; i++) {
-        // create network and system
         auto network_api = std::make_unique<CongestionAwareNetworkApi>(i);
         auto* const system =
             new Sys(i, workload_configuration, comm_group_configuration,
@@ -89,17 +87,14 @@ int main(int argc, char* argv[]) {
                     npus_count_per_dim, queues_per_dim, injection_scale,
                     comm_scale, rendezvous_protocol);
 
-        // push back network and system
         network_apis.push_back(std::move(network_api));
         systems.push_back(system);
     }
 
-    // Initiate ASTRA-sim simulation
     for (int i = 0; i < npus_count; i++) {
         systems[i]->workload->fire();
     }
 
-    // run simulation
     while (!event_queue->finished()) {
         event_queue->proceed();
     }
@@ -111,7 +106,6 @@ int main(int argc, char* argv[]) {
     }
     systems.clear();
 
-    // terminate simulation
     AstraSim::LoggerFactory::shutdown();
     return 0;
 }
